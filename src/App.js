@@ -6,6 +6,10 @@ import SingleProduct from './components/SingleProduct';
 import HomePage from './components/HomePage';
 import Login from './components/Login';
 
+import { AuthProvider } from './utils/authContext';
+import { RequireAuth } from './utils/RequireAuth';
+import { PurchaseProvider } from './utils/purchaseContext';
+
 function App() {
   return (
     <div className="App">
@@ -24,13 +28,18 @@ function App() {
         </a>
       </header> */}
 
+      <AuthProvider>
+        <PurchaseProvider>
+          <Routes>
+            <Route path='/' element={<LandingPage />}></Route>
+            <Route path='/login' element={<Login />}></Route>
+            <Route path='/singleProduct/:productId' element={<SingleProduct />}></Route>
+            <Route path='/home' element={<RequireAuth> <HomePage /> </RequireAuth>}></Route>
+          </Routes>
+        </PurchaseProvider>
+      </AuthProvider>
 
-      <Routes>
-        <Route path='/' element={<LandingPage />}></Route>
-        <Route path='/login' element={<Login />}></Route>
-        <Route path='/singleProduct/:productId' element={<SingleProduct />}></Route>
-        <Route path='/home' element={<HomePage />}></Route>
-      </Routes>
+
     </div>
   );
 }
