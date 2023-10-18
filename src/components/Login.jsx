@@ -2,33 +2,70 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../utils/authContext';
+import { useUser } from '../utils/userContext';
+import userServices from '../services/userService';
 function Login() {
     const auth = useAuth();
+    const user = useUser();
     const navigate = useNavigate();
     const [credentials, setCredentials] = useState({ email: "", password: "" });
+
+    const [counter, setCounter] = useState(0);
+
 
 
     const handleLogin = (e) => {
         e.preventDefault();
-        console.log("Login");
 
         console.log(`Email: ${credentials.email}`);
-        console.log(`Password: ${credentials.password}`)
+        console.log(`Password: ${credentials.password}`);
 
-        // assume email and password are valid as 'sanjiv@gmail.com' and 'sanjiv123' respectively
-        if (credentials.email === 'sanjiv@gmail.com' || credentials.password === 'sanjiv123') {
+        userServices.login(credentials)
+            .then(res => {
+                // set the user as logged in
+                auth.setEmail(credentials.email);
 
-            // set the user as logged in
-            auth.setEmail(credentials.email);
+                //   get the token from the response and save in the local storage
+                window.localStorage.setItem('token', res.data.token);
 
-            // create purchase context just like the auth.setEmail
+                // store the user in the user context
+                user.setUser(res.data.user);
 
-            navigate('/home');
-        } else {
-            window.alert('Invalid credentials');
-        }
+                // naviagte to the home page if it is user , otherwise to the admin profile
+                if (res.data.user.role === 'user') {
+                    navigate('/home');
+                }
+                else if (res.data.user.role === 'admin') {
+                    navigate('/adminProfile');
+                }
+            })
+            .catch(err => {
+                window.alert(err.response.data.error);
 
-        // console.log(data);
+                // if the account is not registered, then redirect to the register page
+                if (err.response.data.error == 'Account has not been registered.') {
+                    setCounter(counter + 1);
+                }
+
+                // if wrong credentials are attempted more than 3 times, then lock the account
+                if (counter === 3) {
+                    // lock the account
+                    userServices.lockAccount({ email: credentials.email })
+                        .then(res => {
+                            if (res.data.status === 'disable') {
+                                window.alert('Your account has been locked. Please, contact the admin to unlock your account.');
+                            }
+                            // reset the counter
+                            setCounter(0);
+                        })
+                        .catch(err => {
+                            window.alert(err.response.data.error);
+                        });
+
+                }
+                // 
+            });
+
     };
     return (
         <>
