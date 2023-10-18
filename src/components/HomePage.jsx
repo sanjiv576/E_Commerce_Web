@@ -4,12 +4,14 @@ import dummyData from "../data/data";
 import { Link } from "react-router-dom";
 
 import { usePurchase } from "../utils/purchaseContext";
+import productServices from "../services/productService";
 
 
 function HomePage() {
     const purchase = usePurchase();
 
     const [purchaseProduct, setPurchaseProduct] = useState({});
+    const [products, setProducts] = useState([]);
 
     useEffect(() => {
         console.log(`Purchase context length from homepage is : ${purchase.purchase.length}`);
@@ -21,6 +23,20 @@ function HomePage() {
                 payment: "pending",
             }
         );
+
+        // get the all products from the server
+        productServices.getAllProudcts()
+            .then(res => {
+
+                // set in the state
+                setProducts(res.data);
+
+                // iterate each product from the response
+                res.data.forEach(product => {
+                    console.log(`Product name from home: ${product.name}`);
+                });
+            })
+            .catch(err => window.alert(err.response.data.error));
     }, []);
 
 
@@ -97,7 +113,7 @@ function HomePage() {
             }
 
             {
-                dummyData.map((product) => {
+                products.map((product) => {
                     return (
                         <div key={product.id}>
                             <h4>{product.id}</h4>

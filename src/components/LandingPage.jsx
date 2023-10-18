@@ -2,12 +2,32 @@ import { Link, useNavigate } from "react-router-dom";
 import dummyData from "../data/data";
 
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import userServices from "../services/userService";
+import productServices from "../services/productService";
 // for guest users
 function LandingPage() {
     const navigate = useNavigate();
 
+    const [products, setProducts] = useState([]);
+
     const [isLogin, setIsLogin] = useState(false);
+
+    useEffect(() => {
+        productServices.getAllProudcts()
+            .then(res => {
+
+                // set in the state
+                setProducts(res.data);
+
+                // iterate each product from the response
+                res.data.forEach(product => {
+                    console.log(`Product name: ${product.name}`);
+                });
+            })
+            .catch(err => window.alert(err.response.data.error));
+
+    }, []);
 
     const handleAddToCart = () => {
 
@@ -35,7 +55,7 @@ function LandingPage() {
 
 
             {
-                dummyData.map((product) => {
+                products.map((product) => {
                     return (
                         <div key={product.id}>
                             <h4>{product.name}</h4>
