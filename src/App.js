@@ -9,6 +9,8 @@ import Login from './components/Login';
 import { AuthProvider } from './utils/authContext';
 import { RequireAuth } from './utils/RequireAuth';
 import { PurchaseProvider } from './utils/purchaseContext';
+import AdminProfile from './components/AdminProfile';
+import { UserProvider } from './utils/userContext';
 
 function App() {
   return (
@@ -29,14 +31,17 @@ function App() {
       </header> */}
 
       <AuthProvider>
-        <PurchaseProvider>
-          <Routes>
-            <Route path='/' element={<LandingPage />}></Route>
-            <Route path='/login' element={<Login />}></Route>
-            <Route path='/singleProduct/:productId' element={<SingleProduct />}></Route>
-            <Route path='/home' element={<RequireAuth> <HomePage /> </RequireAuth>}></Route>
-          </Routes>
-        </PurchaseProvider>
+        <UserProvider>
+          <PurchaseProvider>
+            <Routes>
+              <Route path='/' element={<LandingPage />}></Route>
+              <Route path='/login' element={<Login />}></Route>
+              <Route path='/singleProduct/:productId' element={<SingleProduct />}></Route>
+              <Route path='/home' element={<RequireAuth> <HomePage /> </RequireAuth>}></Route>
+              <Route path='/adminProfile' element={<RequireAuth> <AdminProfile /> </RequireAuth>}></Route>
+            </Routes>
+          </PurchaseProvider>
+        </UserProvider>
       </AuthProvider>
 
 
