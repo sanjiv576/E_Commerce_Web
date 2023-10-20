@@ -11,6 +11,7 @@ import { RequireAuth } from './utils/RequireAuth';
 import { PurchaseProvider } from './utils/purchaseContext';
 import AdminProfile from './components/AdminProfile';
 import { UserProvider } from './utils/userContext';
+import Signup from './components/Signup';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             <Routes>
               <Route path='/' element={<LandingPage />}></Route>
               <Route path='/login' element={<Login />}></Route>
+              <Route path='/signup' element={<Signup />}></Route>
               <Route path='/singleProduct/:productId' element={<SingleProduct />}></Route>
               <Route path='/home' element={<RequireAuth> <HomePage /> </RequireAuth>}></Route>
               <Route path='/adminProfile' element={<RequireAuth> <AdminProfile /> </RequireAuth>}></Route>
