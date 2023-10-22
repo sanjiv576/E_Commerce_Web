@@ -12,6 +12,8 @@ import { PurchaseProvider } from './utils/purchaseContext';
 import AdminProfile from './components/AdminProfile';
 import { UserProvider } from './utils/userContext';
 import Signup from './components/Signup';
+import { Contact } from './components/Guest/Contact';
+import { About } from './components/Guest/About';
 
 function App() {
   return (
@@ -36,6 +38,8 @@ function App() {
           <PurchaseProvider>
             <Routes>
               <Route path='/' element={<LandingPage />}></Route>
+              <Route path='/contact' element={<Contact />}></Route>
+              <Route path='/about' element={<About />}></Route>
               <Route path='/login' element={<Login />}></Route>
               <Route path='/signup' element={<Signup />}></Route>
               <Route path='/singleProduct/:productId' element={<SingleProduct />}></Route>
