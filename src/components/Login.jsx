@@ -6,6 +6,7 @@ import { useUser } from '../utils/userContext';
 import userServices from '../services/userService';
 import { Alert, Avatar, Chip, Grid, Snackbar, } from '@mui/material';
 import { isEmail } from '../lib/input-validation';
+import { ResponsiveAppBarLandingPage } from './AppBar/ResponsiveAppBarLandingPage';
 
 
 function Login() {
@@ -125,7 +126,7 @@ function Login() {
 
     return (
         <>
-
+            <ResponsiveAppBarLandingPage />
             <div className="bg-darkzero h-screen w-screen">
                 <div className="text-3xl p-2 font-bold">Welcome to Samaan Kinam E-commerce</div>
                 <div className="w-[80%] mx-auto" align="center">

@@ -5,6 +5,8 @@ import dummyData from "../data/data";
 import { useEffect, useState } from "react";
 import userServices from "../services/userService";
 import productServices from "../services/productService";
+import { ResponsiveAppBarLandingPage } from "./AppBar/ResponsiveAppBarLandingPage";
+
 // for guest users
 function LandingPage() {
     const navigate = useNavigate();
@@ -45,6 +47,7 @@ function LandingPage() {
 
     return (
         <>
+            <ResponsiveAppBarLandingPage />
             <h1>Landing Page</h1>
 
             <p>NOte: Guest mode only</p>
