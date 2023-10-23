@@ -48,6 +48,53 @@ function LandingPage() {
     return (
         <>
             <ResponsiveAppBarLandingPage />
+
+            <div className="text-3xl p-2 font-bold">Welcome to Samaan Kinam E-commerce</div>
+            <div className="carousel w-full h-90 carousel-section">
+                <div id="item1" className="carousel-item w-full">
+                    <img src="./images/4.png" className="w-full" />
+
+                </div>
+                <div id="item2" className="carousel-item w-full">
+                    <img src="./images/3.png" className="w-full" />
+
+                </div>
+                <div id="item3" className="carousel-item w-full">
+                    <img src="./images/5.png" className="w-full" />
+
+                </div>
+                <div id="item4" className="carousel-item w-full">
+                    <img src="./images/2.png" className="w-full" />
+
+                </div>
+            </div>
+            <div className="flex justify-center w-full py-2 gap-2">
+                <a href="#item1" className="btn btn-xs btn-secondary">1</a>
+                <a href="#item2" className="btn btn-xs btn-secondary">2</a>
+                <a href="#item3" className="btn btn-xs btn-secondary">3</a>
+                <a href="#item4" className="btn btn-xs btn-secondary">4</a>
+            </div>
+
+
+            <div className="carousel carousel-end rounded-box row-carousel mt-4">
+
+                {
+                    [...Array(5)].map((_, i) => {
+                        return products.map((product) => {
+                            return (
+
+                                <div className="carousel-item mr-5" key={product.id + i}>
+                                    <img src={`http://localhost:3005/product/${product.picture}`} alt="Drink" />
+                                </div>
+
+                            );
+                        })
+                    })
+                } 
+
+            </div>
+
+
             <h1>Landing Page</h1>
 
             <p>NOte: Guest mode only</p>
@@ -65,6 +112,7 @@ function LandingPage() {
                             <p>{product.price}</p>
                             <p>{product.category}</p>
                             <p>{product.description}</p>
+                            <p>{product.picture}</p>
                             <button onClick={handleAddToCart}>Add to Cart</button>
                         </div>
                     );

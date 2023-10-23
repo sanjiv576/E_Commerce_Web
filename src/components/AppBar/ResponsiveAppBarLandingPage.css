@@ -8,6 +8,14 @@ li {
 
 }
 
+.carousel-section img {
+    height: 450px;
+}
+
 button {
     padding: 9px !important;
+}
+
+.row-carousel {
+    height: 200px;
 }
