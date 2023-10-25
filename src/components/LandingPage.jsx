@@ -4,16 +4,23 @@ import dummyData from "../data/data";
 
 import { useEffect, useState } from "react";
 import userServices from "../services/userService";
+import './LandingPage.css';
 import productServices from "../services/productService";
 import { ResponsiveAppBarLandingPage } from "./AppBar/ResponsiveAppBarLandingPage";
+import { Button, IconButton } from "@mui/material";
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+
 
 // for guest users
 function LandingPage() {
     const navigate = useNavigate();
 
     const [products, setProducts] = useState([]);
-
+    const [newReleasedProduct, setNewReleasedProduct] = useState({});
+    const [hottestProduct, setHottestProduct] = useState({});
     const [isLogin, setIsLogin] = useState(false);
+
+
 
     useEffect(() => {
         productServices.getAllProudcts()
@@ -21,6 +28,13 @@ function LandingPage() {
 
                 // set in the state
                 setProducts(res.data);
+
+                console.log(typeof (res.data))
+                console.log(res.data[0])
+
+                // set the first and last product in the state
+                setNewReleasedProduct(res.data[0]);
+                setHottestProduct(res.data[res.data.length - 1]);
 
                 // iterate each product from the response
                 res.data.forEach(product => {
@@ -90,12 +104,85 @@ function LandingPage() {
                             );
                         })
                     })
-                } 
+                }
 
             </div>
 
+            <div className="card lg:card-side bg-base-100 shadow-xl single-row-card">
+                <figure><img src={`http://localhost:3005/product/${newReleasedProduct.picture}`} /></figure>
+                <div className="card-body">
+                    <h2 className="card-title text-4xl font-bold mb-4">New released!</h2>
+                    <p className="justify-center">{newReleasedProduct.description}</p>
+                    <div className="card-actions justify-end">
 
-            <h1>Landing Page</h1>
+                        <Button onClick={handleAddToCart} variant="contained" startIcon={<AddShoppingCartIcon />}>
+                            Add to cart
+                        </Button>
+                    </div>
+                </div>
+
+            </div>
+
+            <h2 className="text-5xl font-bold m-4">All Products</h2>
+
+
+            <div className="allProductsView">
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {
+                        [...Array(4)].map((_, i) => {
+
+                            return products.map((product) => (
+                                <div key={product.id} className="card bg-base-100 shadow-xl m-4">
+                                    <figure>
+                                        <img className="mt-4" src={`http://localhost:3005/product/${product.picture}`} alt="Product" />
+                                    </figure>
+                                    <div className="card-body">
+                                        <h2>{product.name}</h2>
+                                        <p>{product.description.substring(0, 99)}...</p>
+                                        <div className="mt-4">
+                                            <Button onClick={handleAddToCart} variant="contained" startIcon={<AddShoppingCartIcon />}>
+                                                Add to cart
+                                            </Button>
+                                        </div>
+                                        <div className="card-actions justify-end mt-2">
+                                            <div className="badge badge-outline badge-info">{product.category}</div>
+                                            <div className="badge badge-outline badge-info">Available</div>
+                                            <div className="badge badge-outline badge-info">Rs {product.price}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+
+
+                        })
+                    }
+                </div>
+
+
+
+
+
+            </div>
+
+            <div className="hero bg-base-200 mb-8">
+                <div className="hero-content flex-col lg:flex-row-reverse">
+
+                    <img id="right-card" src={`http://localhost:3005/product/${hottestProduct.picture}`} className="max-w-sm rounded-lg shadow-2xl" />
+                    <div className="single-card-right">
+                        <h1 className="text-4xl font-bold">Hottest!</h1>
+                        <p className="py-6">{hottestProduct.description}</p>
+                        <div className="card-actions justify-start">
+                            <Button onClick={handleAddToCart} variant="contained" startIcon={<AddShoppingCartIcon />}>
+                                Add to cart
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            {/* <h1>Landing Page</h1>
 
             <p>NOte: Guest mode only</p>
 
@@ -117,7 +204,7 @@ function LandingPage() {
                         </div>
                     );
                 })
-            }
+            } */}
         </>
     );
 }
