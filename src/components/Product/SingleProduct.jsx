@@ -1,9 +1,9 @@
 
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import dummyData from "../data/data";
+import dummyData from "../../data/data";
 
-import { usePurchase } from "../utils/purchaseContext";
+import { usePurchase } from "../../utils/purchaseContext";
 
 import { useState } from "react";
 
@@ -53,7 +53,7 @@ function SingleProduct() {
             "quantity": quantity,
             "price": product.price,
         }
-      
+
         console.log(`Selected purchase product name is : ${purchaseProudct.name}`);
         console.log(`Selected purchase product quantity is : ${purchaseProudct.quantity}`);
         console.log(`Selected purchase product price is : ${purchaseProudct.price}`);

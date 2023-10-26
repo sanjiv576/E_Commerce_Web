@@ -1,12 +1,10 @@
 import { Link, useNavigate } from "react-router-dom";
-import dummyData from "../data/data";
 
 
 import { useEffect, useState } from "react";
-import userServices from "../services/userService";
 import './LandingPage.css';
-import productServices from "../services/productService";
-import { ResponsiveAppBarLandingPage } from "./AppBar/ResponsiveAppBarLandingPage";
+import productServices from "../../services/productService";
+import { ResponsiveAppBarLandingPage } from "../AppBar/ResponsiveAppBarLandingPage";
 import { Button, IconButton } from "@mui/material";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
@@ -182,29 +180,7 @@ function LandingPage() {
             </div>
 
 
-            {/* <h1>Landing Page</h1>
-
-            <p>NOte: Guest mode only</p>
-
-            <h3>Products</h3>
-
-            <Link to={'/login'}>Login</Link>
-
-
-            {
-                products.map((product) => {
-                    return (
-                        <div key={product.id}>
-                            <h4>{product.name}</h4>
-                            <p>{product.price}</p>
-                            <p>{product.category}</p>
-                            <p>{product.description}</p>
-                            <p>{product.picture}</p>
-                            <button onClick={handleAddToCart}>Add to Cart</button>
-                        </div>
-                    );
-                })
-            } */}
+           
         </>
     );
 }

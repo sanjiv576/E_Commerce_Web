@@ -1,10 +1,10 @@
 // only for registered users
 import { useEffect, useState } from "react";
-import dummyData from "../data/data";
+import dummyData from "../../data/data";
 import { Link } from "react-router-dom";
 
-import { usePurchase } from "../utils/purchaseContext";
-import productServices from "../services/productService";
+import { usePurchase } from "../../utils/purchaseContext";
+import productServices from "../../services/productService";
 
 
 function HomePage() {

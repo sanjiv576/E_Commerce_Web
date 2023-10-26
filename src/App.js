@@ -1,19 +1,19 @@
 // import logo from './logo.svg';
 import './App.css';
 import { Route, Routes } from 'react-router-dom';
-import LandingPage from './components/LandingPage';
-import SingleProduct from './components/SingleProduct';
-import HomePage from './components/HomePage';
-import Login from './components/Login';
+import SingleProduct from './components/Product/SingleProduct';
+import HomePage from './components/User/HomePage';
+import Login from './components/Auth/Login';
 
 import { AuthProvider } from './utils/authContext';
 import { RequireAuth } from './utils/RequireAuth';
 import { PurchaseProvider } from './utils/purchaseContext';
-import AdminProfile from './components/AdminProfile';
+import AdminProfile from './components/Admin/AdminProfile';
 import { UserProvider } from './utils/userContext';
-import Signup from './components/Signup';
+import Signup from './components/Auth/Signup';
 import { Contact } from './components/Guest/Contact';
 import { About } from './components/Guest/About';
+import LandingPage from './components/LandingPage/LandingPage';
 
 function App() {
   return (

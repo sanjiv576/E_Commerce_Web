@@ -1,12 +1,12 @@
 
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../utils/authContext';
-import { useUser } from '../utils/userContext';
-import userServices from '../services/userService';
+import { useAuth } from '../../utils/authContext';
+import { useUser } from '../../utils/userContext';
+import userServices from '../../services/userService';
 import { Alert, Avatar, Chip, Grid, Snackbar, } from '@mui/material';
-import { isEmail } from '../lib/input-validation';
-import { ResponsiveAppBarLandingPage } from './AppBar/ResponsiveAppBarLandingPage';
+import { isEmail } from '../../lib/input-validation';
+import { ResponsiveAppBarLandingPage } from '../AppBar/ResponsiveAppBarLandingPage';
 
 
 function Login() {
