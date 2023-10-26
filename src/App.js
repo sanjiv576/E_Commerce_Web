@@ -14,6 +14,7 @@ import Signup from './components/Auth/Signup';
 import { Contact } from './components/Guest/Contact';
 import { About } from './components/Guest/About';
 import LandingPage from './components/LandingPage/LandingPage';
+import { ErrorPage } from './components/Error/ErrorPage';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
               <Route path='/singleProduct/:productId' element={<SingleProduct />}></Route>
               <Route path='/home' element={<RequireAuth> <HomePage /> </RequireAuth>}></Route>
               <Route path='/adminProfile' element={<RequireAuth> <AdminProfile /> </RequireAuth>}></Route>
+              <Route path='*' element={<ErrorPage />}></Route>
             </Routes>
           </PurchaseProvider>
         </UserProvider>
