@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 
 import { useEffect, useState } from "react";
@@ -7,6 +7,7 @@ import productServices from "../../services/productService";
 import { ResponsiveAppBarLandingPage } from "../AppBar/ResponsiveAppBarLandingPage";
 import { Button, IconButton } from "@mui/material";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 
 // for guest users
@@ -64,19 +65,19 @@ function LandingPage() {
             <div className="text-3xl p-2 font-bold">Welcome to Samaan Kinam E-commerce</div>
             <div className="carousel w-full h-90 carousel-section">
                 <div id="item1" className="carousel-item w-full">
-                    <img src="./images/4.png" className="w-full" />
+                    <img src="/images/4.png" className="w-full" />
 
                 </div>
                 <div id="item2" className="carousel-item w-full">
-                    <img src="./images/3.png" className="w-full" />
+                    <img src="/images/3.png" className="w-full" />
 
                 </div>
                 <div id="item3" className="carousel-item w-full">
-                    <img src="./images/5.png" className="w-full" />
+                    <img src="/images/5.png" className="w-full" />
 
                 </div>
                 <div id="item4" className="carousel-item w-full">
-                    <img src="./images/2.png" className="w-full" />
+                    <img src="/images/2.png" className="w-full" />
 
                 </div>
             </div>
@@ -138,8 +139,14 @@ function LandingPage() {
                                     <div className="card-body">
                                         <h2>{product.name}</h2>
                                         <p>{product.description.substring(0, 99)}...</p>
-                                        <div className="mt-4">
-                                            <Button onClick={handleAddToCart} variant="contained" startIcon={<AddShoppingCartIcon />}>
+                                        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1">
+                                            <Button className="mb-4" onClick={() => navigate(`/singleProduct/${product.id}`)} variant="contained" startIcon={<VisibilityIcon />}>
+                                                View
+                                            </Button>
+
+                                            <br />
+
+                                            <Button className="m-2" onClick={handleAddToCart} variant="contained" startIcon={<AddShoppingCartIcon />}>
                                                 Add to cart
                                             </Button>
                                         </div>
@@ -180,7 +187,7 @@ function LandingPage() {
             </div>
 
 
-           
+
         </>
     );
 }
