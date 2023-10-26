@@ -10,7 +10,7 @@ export const ResponsiveAppBarLandingPage = () => {
                 <div className="navbar-start">
 
                     <NavLink to={'/'}>
-                        <img className='app-img' src="./images/logo.png" alt="App logo" />
+                        <img className='app-img' src="/images/logo.png" alt="App logo" />
                     </NavLink>
                 </div>
                 <div className="navbar-center hidden lg:flex">
