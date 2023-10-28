@@ -8,8 +8,9 @@ import { usePurchase } from "../../utils/purchaseContext";
 import { useState } from "react";
 import productServices from "../../services/productService";
 import { useAuth } from "../../utils/authContext";
-import './SingleProduct.css';
 import { ResponsiveAppBarLandingPage } from "../AppBar/ResponsiveAppBarLandingPage";
+import { Alert, IconButton, Input, Snackbar } from "@mui/material";
+import SendIcon from '@mui/icons-material/Send';
 
 function SingleProduct() {
     const purchase = usePurchase();
@@ -21,6 +22,23 @@ function SingleProduct() {
 
     const [isUserLogin, setIsUserLogin] = useState(false);
     const [reviews, setReviews] = useState([]);
+    // review state for writing
+    const [feedback, setFeedback] = useState('');
+    const [snack, setSnack] = useState({
+        type: '',
+        message: '',
+    });
+
+    // for open and close snackbar
+    const [open, setOpen] = React.useState(false);
+
+    // for closing snackbar
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    };
 
 
 
@@ -120,6 +138,27 @@ function SingleProduct() {
 
     };
 
+    const handleReview = (e) => {
+        e.preventDefault();
+
+        if (isUserLogin) {
+            if (feedback === '') {
+                setSnack({ type: 'error', message: 'Please, write a review!' });
+                setOpen(true);
+                return;
+            }
+
+            setSnack({ type: 'success', message: 'Review added successfully!' });
+            setOpen(true);
+            setFeedback('');
+        }
+        else {
+            setSnack({ type: 'error', message: 'Please, login to write a review!' });
+            setOpen(true);
+        }
+
+    };
+
     return (
         <div>
 
@@ -151,10 +190,23 @@ function SingleProduct() {
                     </div>
                 </div>
             </div>
-            <h2 className="text-4xl font-bold">Reviews</h2>
+            <h2 className="text-4xl font-bold m-4">Reviews</h2>
 
             <div className="reviews-section m-10">
-                <div className="send-review-section">Send review here</div>
+                <div className="send-review-section">
+                    <Input
+                        type="text"
+
+                        placeholder="Write a review ..."
+                        onChange={(e) => setFeedback(e.target.value)}
+                        value={feedback}
+                        className="input input-bordered text-2xl w-1/2"
+                        style={{ color: 'white' }}
+                        endAdornment={<span className="input-icon">
+                            <IconButton onClick={handleReview} style={{ color: 'white' }}><SendIcon />
+                            </IconButton></span>}
+                    />
+                </div>
 
                 <div className="view-reviews">
                     {reviews && reviews.length > 0 ? (
@@ -163,14 +215,14 @@ function SingleProduct() {
                             return (
                                 <div key={review._id}>
                                     <div className="chat chat-start">
-                                        <p>{review.userName}</p>
-                                        <h3>{review.text}</h3>
-                                        {/* <div className="chat-image avatar">
+                                        <div className="chat-image avatar">
                                             <div className="w-10 rounded-full">
-                                                <img src={`http://localhost:3005/profile/${review.userPicture}`} />
+                                                <img src={`http://localhost:3005/profile/${review.userPicture}`} className="max-w-sm rounded-lg shadow-2xl" />
+
                                             </div>
                                         </div>
-                                        <div className="chat-bubble">{review.text}</div> */}
+                                        <div className="chat-header text-info">{review.userName}</div>
+                                        <div className="chat-bubble">{review.text}</div>
                                     </div>
                                 </div>
 
@@ -182,6 +234,12 @@ function SingleProduct() {
                 </div>
 
             </div>
+
+            <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity={snack.type} sx={{ width: '100%' }}>
+                    {snack.message}
+                </Alert>
+            </Snackbar>
 
             {/* <h1>Single Product</h1>
             <h3>{product.name}</h3>
