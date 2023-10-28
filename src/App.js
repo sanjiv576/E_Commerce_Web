@@ -15,6 +15,7 @@ import { Contact } from './components/Guest/Contact';
 import { About } from './components/Guest/About';
 import LandingPage from './components/LandingPage/LandingPage';
 import { ErrorPage } from './components/Error/ErrorPage';
+import { PurchaseCart } from './components/Product/PurchaseCart';
 
 function App() {
   return (
@@ -45,6 +46,7 @@ function App() {
               <Route path='/signup' element={<Signup />}></Route>
               <Route path='/singleProduct/:productId' element={<SingleProduct />}></Route>
               <Route path='/home' element={<RequireAuth> <HomePage /> </RequireAuth>}></Route>
+              <Route path='/purchaseCart' element={<RequireAuth> <PurchaseCart /> </RequireAuth>}></Route>
               <Route path='/adminProfile' element={<RequireAuth> <AdminProfile /> </RequireAuth>}></Route>
               <Route path='*' element={<ErrorPage />}></Route>
             </Routes>
