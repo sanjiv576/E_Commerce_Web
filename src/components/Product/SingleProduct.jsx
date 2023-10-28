@@ -1,6 +1,6 @@
 
 import React, { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 // import dummyData from "../../data/data";
 
 import { usePurchase } from "../../utils/purchaseContext";
@@ -11,10 +11,12 @@ import { useAuth } from "../../utils/authContext";
 import { ResponsiveAppBarLandingPage } from "../AppBar/ResponsiveAppBarLandingPage";
 import { Alert, IconButton, Input, Snackbar } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
+import { ResponsiveAppBarHomepage } from "../AppBar/ResponsiveAppBarHomepage";
 
 function SingleProduct() {
     const purchase = usePurchase();
     const auth = useAuth();
+    const navigate = useNavigate();
 
     const { productId } = useParams();
     const [product, setProduct] = useState({});
@@ -133,6 +135,16 @@ function SingleProduct() {
         // print the data that storeing in the purchaseContext
         // console.log(`Purchase product name is : ${purchase[0].name}`);
 
+
+        setSnack({ type: 'success', message: 'Product added to cart successfully!' });
+        setOpen(true);
+
+        // reset the quantity
+        setQuantity(0);
+        return;
+        // navigate('/home');
+
+
         console.log("Add to cart");
 
 
@@ -164,7 +176,7 @@ function SingleProduct() {
 
             {
                 isUserLogin ? (<>
-                    {/* <ResponsiveAppBarLandingPage /> */}
+                    <ResponsiveAppBarHomepage purchaseProductLength={purchase.purchase.length} />
                 </>) : (<ResponsiveAppBarLandingPage />)
             }
 
