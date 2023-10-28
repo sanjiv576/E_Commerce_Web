@@ -2,7 +2,7 @@
 
 import axios from "axios";
 const baseUrl = 'http://localhost:3005/products';
-
+const getToken = () => `bearer ${window.localStorage.getItem('token')}`;
 const getAllProudcts = () => {
     return axios.get(`${baseUrl}`);
 };
@@ -17,10 +17,20 @@ const getAllReviews = (id) => {
 
 }
 
+const purchaseProduct = (products) => {
+    return axios.post('http://localhost:3005/purchase', products, {
+        headers: {
+            Authorization: getToken()
+        }
+
+    });
+};
+
 const productServices = {
     getAllProudcts,
     getSingleProductById,
-    getAllReviews
+    getAllReviews,
+    purchaseProduct,
 }
 
 export default productServices;
