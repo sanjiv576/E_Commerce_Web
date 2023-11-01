@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 // import dummyData from "../../data/data";
 
 import { usePurchase } from "../../utils/purchaseContext";
-
+import sound from '../../assets/sound.wav';
 import { useState } from "react";
 import productServices from "../../services/productService";
 import { useAuth } from "../../utils/authContext";
@@ -12,11 +12,16 @@ import { ResponsiveAppBarLandingPage } from "../AppBar/ResponsiveAppBarLandingPa
 import { Alert, IconButton, Input, Snackbar } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import { ResponsiveAppBarHomepage } from "../AppBar/ResponsiveAppBarHomepage";
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import { useUser } from "../../utils/userContext";
+
 
 function SingleProduct() {
     const purchase = usePurchase();
     const auth = useAuth();
     const navigate = useNavigate();
+    const user = useUser();
 
     const { productId } = useParams();
     const [product, setProduct] = useState({});
@@ -30,6 +35,14 @@ function SingleProduct() {
         type: '',
         message: '',
     });
+    const [userId, setUserId] = useState('');
+    const [edit, setEdit] = useState({
+        isEdit: false,
+        reviewId: '',
+        text: '',
+    });
+    const [currentUserReviewId, setCurrentUserReviewId] = useState([]);
+    const [deleteReviewId, setDeleteReviewId] = useState('');
 
     // for open and close snackbar
     const [open, setOpen] = React.useState(false);
@@ -49,6 +62,9 @@ function SingleProduct() {
         if (auth.email) {
             setIsUserLogin(true);
             console.log(`User is login`);
+            // get user id
+            setUserId(user.user.id);
+            console.log(`User id is : ${userId}`)
         }
         else {
             console.log(`User is not login`);
@@ -70,6 +86,7 @@ function SingleProduct() {
 
                         // iterate each response
                         res.data.forEach(review => {
+                            console.log(`Review user id: ${review.userId}`);
                             console.log(`Review user name: ${review.userName}`);
                             console.log(`Review user picture: ${review.userPicture}`);
                             console.log(`Review: ${review.text}`);
@@ -112,6 +129,8 @@ function SingleProduct() {
         }
     };
 
+    const play = () => new Audio(sound).play();
+
     const handleAddToCart = (e) => {
         e.preventDefault();
         if (quantity === 0) return window.alert('Please, select quantity first');
@@ -135,17 +154,13 @@ function SingleProduct() {
         // print the data that storeing in the purchaseContext
         // console.log(`Purchase product name is : ${purchase[0].name}`);
 
-
+        play();
         setSnack({ type: 'success', message: 'Product added to cart successfully!' });
         setOpen(true);
 
         // reset the quantity
         setQuantity(0);
         return;
-        // navigate('/home');
-
-
-        console.log("Add to cart");
 
 
     };
@@ -155,21 +170,120 @@ function SingleProduct() {
 
         if (isUserLogin) {
             if (feedback === '') {
+                play();
                 setSnack({ type: 'error', message: 'Please, write a review!' });
                 setOpen(true);
                 return;
             }
+            const addedReview = {
+                text: feedback,
+            }
 
-            setSnack({ type: 'success', message: 'Review added successfully!' });
-            setOpen(true);
-            setFeedback('');
+            // add review to the servier
+            productServices.addReview(productId, addedReview)
+                .then(res => {
+
+                    console.log(`Added review response from the server : ${res.data}`)
+                    // also add the review in the reviews state
+
+                    const newReview = {
+                        _id: res.data._id,
+                        text: res.data.text,
+                        userId: res.data.userId,
+                        userName: res.data.userName,
+                        userPicture: res.data.userPicture,
+                    };
+                    setReviews([...reviews, newReview])
+
+                    play();
+                    setSnack({ type: 'success', message: 'Review added successfully!' });
+                    setOpen(true);
+                    setFeedback('');
+                })
+                .catch(err => {
+                    play();
+                    setSnack({ type: 'error', message: err.response.data.error });
+                    setOpen(true);
+
+                })
+
+
+
         }
         else {
+            play();
             setSnack({ type: 'error', message: 'Please, login to write a review!' });
             setOpen(true);
         }
+    };
+
+    const handleEdit = () => {
+        // console.log(`Review id for editing is : ${edit.reviewId}`);
+
+        // console.log(`Update text is : ${edit.text}`);
+
+        const editedReview = {
+            text: edit.text,
+        };
+
+        // update review
+        productServices.updateReview(productId, edit.reviewId, editedReview)
+            .then(res => {
+                // console.log(res.data);
+                play();
+                setSnack({ type: 'success', message: 'Review updated successfully!' });
+                setOpen(true);
+
+                // also update the review state
+
+                const updatedReview = reviews.map(review => {
+                    if (review._id == edit.reviewId) {
+                        return {
+                            ...review,
+                            text: edit.text,
+                        }
+                    }
+                    return review;
+                });
+
+                setReviews(updatedReview);
+
+                // reset the edit state
+                setEdit({ isEdit: false, reviewId: '', text: '' });
+                setFeedback('');
+            })
+            .catch((err) => {
+                play();
+                setSnack({ type: 'error', message: err.response.data.error });
+                setOpen(true);
+            });
 
     };
+
+    const handleDelete = (reviewId) => {
+        console.log(`Review id for deleting is : ${reviewId}`);
+        const confirmation = window.confirm('Are you sure to delete this review?');
+
+        if (confirmation) {
+            productServices.deleteReview(productId, reviewId)
+                .then(res => {
+                    play();
+                    setSnack({ type: 'success', message: 'Review deleted successfully!' });
+                    setOpen(true);
+
+                    // also delete the review from the state
+                    const updatedReview = reviews.filter(review => review._id !== reviewId);
+
+                    setReviews(updatedReview);
+                })
+                .catch(err => {
+                    play();
+                    setSnack({ type: 'error', message: err.response.data.error });
+                    setOpen(true);
+                })
+        }
+    };
+
 
     return (
         <div>
@@ -210,13 +324,21 @@ function SingleProduct() {
                         type="text"
 
                         placeholder="Write a review ..."
-                        onChange={(e) => setFeedback(e.target.value)}
-                        value={feedback}
+                        onChange={edit.isEdit ? (e) => setEdit({ ...edit, text: e.target.value }) : (e) => setFeedback(e.target.value)}
+                        value={edit.isEdit ? edit.text : feedback}
                         className="input input-bordered text-2xl w-1/2"
                         style={{ color: 'white' }}
-                        endAdornment={<span className="input-icon">
-                            <IconButton onClick={handleReview} style={{ color: 'white' }}><SendIcon />
-                            </IconButton></span>}
+                        endAdornment={
+                            edit.isEdit ? (
+                                <span className="input-icon">
+                                    <IconButton onClick={handleEdit} style={{ color: 'white' }}><EditIcon />
+                                    </IconButton></span>
+                            ) : (
+                                <span className="input-icon">
+                                    <IconButton onClick={handleReview} style={{ color: 'white' }}><SendIcon />
+                                    </IconButton></span>
+                            )
+                        }
                     />
                 </div>
 
@@ -226,7 +348,7 @@ function SingleProduct() {
                             console.log('Review:', review);
                             return (
                                 <div key={review._id}>
-                                    <div className="chat chat-start">
+                                    <div className="chat chat-start mb-4">
                                         <div className="chat-image avatar">
                                             <div className="w-10 rounded-full">
                                                 <img src={`http://localhost:3005/profile/${review.userPicture}`} className="max-w-sm rounded-lg shadow-2xl" />
@@ -234,14 +356,42 @@ function SingleProduct() {
                                             </div>
                                         </div>
                                         <div className="chat-header text-info">{review.userName}</div>
-                                        <div className="chat-bubble">{review.text}</div>
+                                        <div className="chat-bubble">{review.text}
+                                            {
+                                                review.userId === userId && (
+                                                    // currentUserReviewId.push(review._id),
+                                                    // setDeleteReviewId(review._id),
+                                                    <>
+                                                        <div className="dropdown dropdown-bottom ml-3">
+                                                            <label tabIndex={0} className="btn btn-outline btn-ghost btn-xs m-1">...</label>
+                                                            <ul tabIndex={0} className="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
+                                                                <li className="text-2xl">
+                                                                    <IconButton className="" onClick={() => setEdit({ isEdit: true, reviewId: review._id, text: review.text })} style={{ color: 'white' }}><EditIcon /> Edit
+                                                                    </IconButton>
+                                                                </li>
+                                                                <div className="divider"></div>
+                                                                <li>
+                                                                    {/* <IconButton className="" onClick={() => setDeleteReview({ isDelete: true, reviewId: review._id })} style={{ color: 'white' }}><DeleteIcon /> Delete */}
+                                                                    <IconButton className="" onClick={() => handleDelete(review._id)} style={{ color: 'white' }}><DeleteIcon /> Delete
+                                                                    </IconButton>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+
+
+                                                    </>
+                                                )
+                                            }
+                                        </div>
+
+
                                     </div>
                                 </div>
 
                             );
                         })
                     ) : (
-                        <h3>No Reviews</h3>
+                        <h3 className="text-warning text-2xl m-4">No Reviews</h3>
                     )}
                 </div>
 
