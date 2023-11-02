@@ -1,13 +1,11 @@
 // only for registered users
 import { useEffect, useState } from "react";
-import dummyData from "../../data/data";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 
 import { usePurchase } from "../../utils/purchaseContext";
 import productServices from "../../services/productService";
 
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Button } from "@mui/material";
 import { ResponsiveAppBarHomepage } from "../AppBar/ResponsiveAppBarHomepage";
 
@@ -176,7 +174,7 @@ function HomePage() {
 
             <div className="allProductsView">
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
                     {
                         [...Array(4)].map((_, i) => {
 
@@ -230,37 +228,6 @@ function HomePage() {
                 </div>
             </div>
 
-
-            <h1>Home Page</h1>
-
-            <p>NOte: Registered Users mode only</p>
-
-            <h3>Products</h3>
-            <button onClick={handlePurchase}>Purchase✔️✔️</button>
-            <br />
-            {
-                purchase.purchase.length > 0 && (
-                    <button onClick={handlePurchaseCancellation}>Cancel</button>
-
-                )
-
-            }
-
-            {
-                products.map((product) => {
-                    return (
-                        <div key={product.id}>
-                            <h4>{product.id}</h4>
-                            <h4>{product.name}</h4>
-                            <p>{product.price}</p>
-                            <p>{product.category}</p>
-                            <p>{product.description}</p>
-                            <button onClick={handleView}>View</button>
-                            <Link to={`/singleProduct/${product.id}`}>Get VIew</Link>
-                        </div>
-                    );
-                })
-            }
         </>
     );
 
