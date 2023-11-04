@@ -36,8 +36,8 @@ const deleteAccount = () => {
     });
 };
 
-const changeEmail = (newEmail) => {
-    return axios.put(`${baseUrl}`, newEmail, {
+const changeName = (newName) => {
+    return axios.put(`${baseUrl}`, newName, {
         headers: {
             Authorization: getToken()
         }
@@ -83,6 +83,14 @@ const uploadProductImage = (productId, selectedImageFile) => {
     return axios.post(`http://localhost:3005/uploads/${productId}`, formData, config);
 };
 
+const getAllPurchaseProducts = () => {
+    return axios.get('http://localhost:3005/purchase', {
+        headers: {
+            Authorization: getToken()
+        }
+
+    });
+};
 
 const userServices = {
     login,
@@ -91,10 +99,11 @@ const userServices = {
     getUser,
     register,
     deleteAccount,
-    changeEmail,
+    changeName,
     changePassword,
     uploadProductImage,
     uploadProfileImage,
+    getAllPurchaseProducts,
 
 }
 
