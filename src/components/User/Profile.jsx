@@ -10,6 +10,7 @@ import PasswordIcon from '@mui/icons-material/Password';
 import { MySnackbar } from '../MySnackbar';
 import sound from '../../assets/sound.wav';
 import { useNavigate } from 'react-router-dom';
+import { allLetter } from '../../lib/input-validation';
 
 export const Profile = () => {
 
@@ -17,6 +18,7 @@ export const Profile = () => {
     const navigate = useNavigate();
 
     const [user, setUser] = useState({});
+    const [newName, setNewName] = useState('');
     const [file, setFile] = useState(null);
     const [snack, setSnack] = useState({
         type: '',
@@ -33,7 +35,6 @@ export const Profile = () => {
         setOpen(false);
     };
     const play = () => new Audio(sound).play();
-
 
 
     useEffect(() => {
@@ -56,9 +57,108 @@ export const Profile = () => {
             return;
         }
 
+        const confirmation = window.confirm('Are you sure you want to change your profile picture?');
+        if (confirmation) {
+            console.log(`File: ${file}`);
+            userServices.uploadProfileImage(file)
+                .then(res => {
+
+                    // update user picture
+                    setUser({ ...user, picture: res.data.filename });
+
+                    play();
+                    setSnack({
+                        type: 'success',
+                        message: 'Profile picture changed successfully',
+                    });
+                    setOpen(true);
+
+                    setFile(null);
+
+                })
+                .catch(err => {
+                    play();
+                    setSnack({
+                        type: 'error',
+                        message: err.response.data.error,
+                    });
+                    setOpen(true);
+                });
+        }
+
     }
 
 
+    const handleChangeName = (e) => {
+        e.preventDefault();
+        if (!allLetter(newName)) {
+            play();
+            setSnack({
+                type: 'error',
+                message: 'Please, enter a valid name',
+            });
+            setOpen(true);
+            return;
+        }
+
+        const confirmation = window.confirm('Are you sure you want to change your name?');
+        if (confirmation) {
+            userServices.changeName(newName)
+                .then(res => {
+
+                    // update user name in the state
+                    setUser({ ...user, fullName: newName });
+
+                    play();
+                    setSnack({
+                        type: 'success',
+                        message: 'Name changed successfully',
+                    });
+                    setOpen(true);
+
+                    // reset the input
+                    setNewName('');
+
+                    // close the modal
+                    window.name_modal.close();
+                })
+                .catch(err => {
+                    play();
+                    setSnack({
+                        type: 'error',
+                        message: err.response.data.error,
+                    });
+                    setOpen(true);
+                })
+        }
+    };
+
+    const handleDeleteAccount = (e) => {
+        e.preventDefault();
+
+        const confirmation = window.confirm('Are you sure you want to delete your account?');
+        if (confirmation) {
+            userServices.deleteAccount()
+                .then(res => {
+                    play();
+                    setSnack({
+                        type: 'success',
+                        message: 'Account deleted successfully',
+                    });
+                    setOpen(true);
+
+                    navigate('/login');
+                })
+                .catch(err => {
+                    play();
+                    setSnack({
+                        type: 'error',
+                        message: err.response.data.error,
+                    });
+                    setOpen(true);
+                })
+        }
+    };
     return (
         <div>
             <ResponsiveAppBarHomepage purchaseProductLength={purchase.purchase.length} />
@@ -88,14 +188,36 @@ export const Profile = () => {
 
             <div className="change-info-section m-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
 
-                <Button variant='contained' onClick={handleUpload} startIcon={<MailLockIcon />} className="btn mb-4" >Change email</Button>
+                <Button variant='contained' onClick={() => document.getElementById('name_modal').showModal()} startIcon={<MailLockIcon />} className="btn mb-4" >Change full name</Button>
 
                 <Button variant='contained' onClick={() => navigate('/changePassword')} startIcon={<PasswordIcon />} className="btn btn-secondary" >Change password</Button>
-                <Button variant='contained' onClick={handleUpload} startIcon={<PersonRemoveIcon />} className="btn btn-secondary" >Delete Account</Button>
+                <Button variant='contained' onClick={handleDeleteAccount} startIcon={<PersonRemoveIcon />} className="btn btn-secondary" >Delete Account</Button>
 
             </div>
 
             <MySnackbar open={open} handleClose={handleClose} type={snack.type} message={snack.message} />
+            \
+            {/* <button className="btn" onClick={() => document.getElementById('name_modal').showModal()}>open modal</button> */}
+            <dialog id="name_modal" className="modal">
+                <div className="modal-box">
+                    <form method="dialog">
+
+                        <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                    </form>
+                    <h3 className="font-bold text-lg m-2" align="left">New full name:</h3>
+                    <form action="" onSubmit={handleChangeName}>
+                        <input
+                            type="text"
+                            className="border border-gray-300 p-2 mb-4 rounded-lg w-full"
+                            onChange={(e) => setNewName(e.target.value)}
+                            value={newName}
+                            required />
+
+                        <input type="submit" value="Change name" className='btn btn-primary w-wide' />
+
+                    </form>
+                </div>
+            </dialog>
         </div>
     )
 }
