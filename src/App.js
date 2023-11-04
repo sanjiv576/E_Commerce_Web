@@ -18,6 +18,7 @@ import { ErrorPage } from './components/Error/ErrorPage';
 import { PurchaseCart } from './components/Product/PurchaseCart';
 import { Profile } from './components/User/Profile';
 import { ChangePassword } from './components/User/ChangePassword';
+import { PurchaseHistory } from './components/User/PurchaseHistory';
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
               <Route path='/purchaseCart' element={<RequireAuth> <PurchaseCart /> </RequireAuth>}></Route>
               <Route path='/adminProfile' element={<RequireAuth> <AdminProfile /> </RequireAuth>}></Route>
               <Route path='/profile' element={<RequireAuth> <Profile /> </RequireAuth>}></Route>
+              <Route path='/purchaseHistory' element={<RequireAuth> <PurchaseHistory /> </RequireAuth>}></Route>
               <Route path='/changePassword' element={<RequireAuth> <ChangePassword /> </RequireAuth>}></Route>
               <Route path='*' element={<ErrorPage />}></Route>
             </Routes>
