@@ -15,8 +15,8 @@ const lockAccount = (email) => {
     return axios.post(`${baseUrl}/lockAccount`, email);
 }
 
-const passwordNeedChange = () => {
-    return axios.post(`${baseUrl}/passwordNeedChange`, {});
+const passwordNeedChange = (data) => {
+    return axios.post(`${baseUrl}/passwordNeedChange`, data);
 }
 
 const getUser = () => {
@@ -92,6 +92,10 @@ const getAllPurchaseProducts = () => {
     });
 };
 
+const unlockAccount = (userId) => {
+    return axios.post(`http://localhost:3005/admin/unlockAccount/${userId}`, {});
+}
+
 const userServices = {
     login,
     lockAccount,
@@ -104,6 +108,7 @@ const userServices = {
     uploadProductImage,
     uploadProfileImage,
     getAllPurchaseProducts,
+    unlockAccount,
 
 }
 
