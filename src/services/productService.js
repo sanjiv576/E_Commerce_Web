@@ -49,6 +49,29 @@ const purchaseProduct = (products) => {
     });
 };
 
+// add product by admin only
+const addProduct = (product) => {
+    return axios.post(`http://localhost:3005/admin/product`, product, {
+        headers: {
+            Authorization: getToken()
+        }
+    });
+};
+
+const editProduct = (productId, updatedProduct) => {
+    return axios.put(`http://localhost:3005/admin/product/${productId}`, updatedProduct, {
+        headers: { Authorization: getToken() }
+    })
+};
+
+const deleteProduct = (productId) => {
+    return axios.delete(`http://localhost:3005/admin/product/${productId}`, {
+        headers: {
+            Authorization: getToken()
+        }
+    })
+};
+
 const productServices = {
     getAllProudcts,
     getSingleProductById,
@@ -57,6 +80,9 @@ const productServices = {
     addReview,
     updateReview,
     deleteReview,
+    addProduct,
+    editProduct,
+    deleteProduct,
 }
 
 export default productServices;
