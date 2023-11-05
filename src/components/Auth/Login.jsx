@@ -88,7 +88,7 @@ function Login() {
                         navigate('/home');
                     }
                     else if (res.data.user.role === 'admin') {
-                        navigate('/adminProfile');
+                        navigate('/addProduct');
                     }
                 })
                 .catch(err => {
