@@ -300,6 +300,8 @@ function SingleProduct() {
                     <div>
                         <h1 className="text-5xl font-bold">{product.name}</h1>
                         <p className="py-6">{product.description}</p>
+                        <p className="py-3 text-warning">Category: {product.category}</p>
+                        <p className="py-3 text-warning">Price: Rs {product.price}</p>
                         {
                             isUserLogin ? (
                                 <>
@@ -403,23 +405,7 @@ function SingleProduct() {
                 </Alert>
             </Snackbar>
 
-            {/* <h1>Single Product</h1>
-            <h3>{product.name}</h3>
-            <p>{product.price}</p>
-            <p>{product.category}</p>
-            <p>{product.description}</p>
-
-            {
-                isUserLogin ? (
-                    <>
-                        <button onClick={handleDecrement}>-</button>
-                        Quantity: {quantity}
-                        <button onClick={handleIncrement}>+</button>
-                        <br />
-                        <button onClick={handleAddToCart}>Add to Cart</button>
-                    </>
-                ) : null
-            } */}
+          
         </div>
     );
 }
