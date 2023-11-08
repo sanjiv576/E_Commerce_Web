@@ -1,32 +1,6 @@
-// const dummyData = [
-//     {
-//         id: 1,
-//         name: "TV",
-//         price: 10000,
-//         category: "electronics",
-//         description: "This is a TV",
-//         picture: "tv.png"
-//     },
-//     {
-//         id: 2,
-//         name: "T-Shirt",
-//         price: 10050000,
-//         category: "clothes",
-//         description: "This is a T-Shirt",
-//         picture: "t-shirt.png"
-//     },
-//     {
-//         id: 3,
-//         name: "Samsung A9",
-//         price: 14000,
-//         category: "mobile",
-//         description: "This is a Samsung A9",
-//         picture: "samsungA9.png"
-//     },
-// ];
 
 
-const dummyData = [
+const dummyProductData = [
     {
 
         "name": "Think And Grow Rich",
@@ -78,4 +52,4 @@ const dummyData = [
     }
 ]
 
-export default dummyData;
+export default dummyProductData;
