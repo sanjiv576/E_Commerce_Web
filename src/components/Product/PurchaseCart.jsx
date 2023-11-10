@@ -4,12 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
 import { Button } from '@mui/material';
 import productServices from '../../services/productService';
+import keys from '../../services/khaltiSecrets';
+import KhaltiCheckout from "khalti-checkout-web";
 
 export const PurchaseCart = () => {
     const purchase = usePurchase();
     const navigate = useNavigate();
     const [purchaseProduct, setPurchaseProduct] = useState({});
     const [totalPrice, setTotalPrice] = useState(0);
+
 
     useEffect(() => {
         // fetch all purchase products from the context api
@@ -26,8 +29,56 @@ export const PurchaseCart = () => {
     }, []);
 
 
-    const handlePayAndPurchase = (e) => {
+    // pay with khalti gateway
+    const handleKhaltiPayment = (e) => {
         e.preventDefault();
+
+        let config = {
+            // "publicKey": "test_public_key_dc74e0fd57cb46cd93832aee0a390234",
+            "publicKey": keys.publicTestKey,
+            "productIdentity": "1234567890",
+            "productName": "Samaan Kinam E-commerce",
+            "productUrl": "http://localhost:3005/",
+            "eventHandler": {
+                onSuccess(payload) {
+                    // hit merchant api for initiating verfication
+                    console.log(payload);
+
+                    // set the payment status to success and also from the server
+                    setPurchaseProduct({
+                        ...purchaseProduct,
+                        payment: 'success',
+                    });
+
+                    // call the purchase product from server API
+                    handlePayAndPurchase();
+                },
+                // onError handler is optional
+                onError(error) {
+                    // handle errors
+                    console.log(error);
+                    window.alert('Payment failed!');
+                },
+                onClose() {
+                    console.log('widget is closing');
+                }
+            },
+            "paymentPreference": ["KHALTI", "EBANKING", "MOBILE_BANKING", "CONNECT_IPS", "SCT"],
+        };
+
+        let checkout = new KhaltiCheckout(config);
+
+        // checkout.show({ amount: totalPrice * 100 });
+
+        // because of test mode, the maximum amount is 200 
+        checkout.show({ amount: 200 * 100 });
+
+
+    }
+
+    // send the purchase product data to the server
+    const handlePayAndPurchase = () => {
+        // e.preventDefault();
 
         console.log(purchaseProduct);
 
@@ -97,8 +148,8 @@ export const PurchaseCart = () => {
                     <tfoot>
                         <tr>
                             <th></th>
-                            <th></th> 
-                            <th></th> 
+                            <th></th>
+                            <th></th>
                             <th className='text-info text-2xl font-bold'>Total Price: Rs {totalPrice}</th>
 
                         </tr>
@@ -106,9 +157,20 @@ export const PurchaseCart = () => {
 
                 </table>
             </div>
-            <Button className='w-wide' onClick={handlePayAndPurchase} variant="contained" startIcon={<ShoppingCartCheckoutIcon />}>
-                Pay and Purchase Now
-            </Button>
+            {
+                purchase.purchase.length > 0 ? (
+                    <>
+                        <div className="text-info">Note: Rs {totalPrice}/- is equivalent to Rs 200 because of Khalti test-mode payment limitation.</div>
+                        <Button className='w-wide' onClick={handleKhaltiPayment} variant="contained" startIcon={<ShoppingCartCheckoutIcon />}>
+                            Pay and Purchase Now
+                        </Button>
+                    </>
+                )
+                    : (
+                        <div className="text-warning">No product in the purchase cart</div>
+                    )
+            }
+
         </div>
     )
 }
