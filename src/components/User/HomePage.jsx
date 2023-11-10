@@ -1,6 +1,6 @@
 // only for registered users
 import { useEffect, useState } from "react";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { usePurchase } from "../../utils/purchaseContext";
 import productServices from "../../services/productService";
@@ -8,6 +8,7 @@ import productServices from "../../services/productService";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import { Button } from "@mui/material";
 import { ResponsiveAppBarHomepage } from "../AppBar/ResponsiveAppBarHomepage";
+import dummyProductData from "../../data/data";
 
 function HomePage() {
     const purchase = usePurchase();
@@ -37,6 +38,18 @@ function HomePage() {
         // get the all products from the server
         productServices.getAllProudcts()
             .then(res => {
+
+                if (res.data.length === 0) {
+
+                    const dummyProduct = dummyProductData;
+                    // dummy data of product
+                    setProducts(dummyProduct);
+
+                    // set the first and last product in the state
+                    setNewReleasedProduct(dummyProduct[1]);
+                    setHottestProduct(dummyProduct[dummyProduct.length - 1]);
+                    return;
+                }
 
                 // set in the state
                 setProducts(res.data);
@@ -139,7 +152,7 @@ function HomePage() {
             <div className="carousel carousel-end rounded-box row-carousel mt-4">
 
                 {
-                    [...Array(5)].map((_, i) => {
+                    [...Array(1)].map((_, i) => {
                         return products.map((product) => {
                             return (
 

@@ -8,6 +8,7 @@ import { ResponsiveAppBarLandingPage } from "../AppBar/ResponsiveAppBarLandingPa
 import { Button, IconButton } from "@mui/material";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import dummyProductData from "../../data/data";
 
 
 // for guest users
@@ -24,6 +25,16 @@ function LandingPage() {
     useEffect(() => {
         productServices.getAllProudcts()
             .then(res => {
+
+                if (res.data.length === 0) {
+                    const dummyProduct = dummyProductData;
+                    setProducts(dummyProduct);
+
+                    // set the first and last product in the state
+                    setNewReleasedProduct(dummyProduct[1]);
+                    setHottestProduct(dummyProduct[dummyProduct.length - 1]);
+                    return;
+                }
 
                 // set in the state
                 setProducts(res.data);
@@ -92,7 +103,7 @@ function LandingPage() {
             <div className="carousel carousel-end rounded-box row-carousel mt-4">
 
                 {
-                    [...Array(5)].map((_, i) => {
+                    [...Array(2)].map((_, i) => {
                         return products.map((product) => {
                             return (
 
