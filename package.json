@@ -1,6 +1,7 @@
 {
   "name": "client_site",
   "version": "0.1.0",
+  "homepage": "https://sanjiv576.github.io/E_Commerce_Web/",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.1",
