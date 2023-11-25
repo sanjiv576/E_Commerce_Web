@@ -103,11 +103,14 @@ export const Profile = () => {
 
         const confirmation = window.confirm('Are you sure you want to change your name?');
         if (confirmation) {
-            userServices.changeName(newName)
+
+            userServices.changeName({ fullName: newName })
                 .then(res => {
 
                     // update user name in the state
                     setUser({ ...user, fullName: newName });
+
+                    console.log(`Response from server while changing name : ${res.data.fullName}`)
 
                     play();
                     setSnack({
@@ -164,7 +167,7 @@ export const Profile = () => {
             <ResponsiveAppBarHomepage purchaseProductLength={purchase.purchase.length} />
             <div className="avatar">
                 <div className="w-60 rounded m-10">
-                    <img src={`http://localhost:3005/profile/${user.picture}`} />
+                    <img src={`https://localhost:3005/profile/${user.picture}`} />
                 </div>
             </div>
 

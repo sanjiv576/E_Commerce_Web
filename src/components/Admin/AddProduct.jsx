@@ -270,7 +270,7 @@ export const AddProduct = () => {
 
                             <div className="avatar">
                                 <div className="w-60 rounded m-10">
-                                    <img src={`http://localhost:3005/product/${imageName}`} />
+                                    <img src={`https://localhost:3005/product/${imageName}`} />
                                 </div>
                             </div>
 
