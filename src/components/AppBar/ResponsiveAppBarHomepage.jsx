@@ -20,12 +20,7 @@ export const ResponsiveAppBarHomepage = ({ purchaseProductLength }) => {
                 setLoginUser(res.data)
                 console.log(`User full Name: ${res.data.fullName}`)
 
-                // check if password need to be change or not
-                // userServices.passwordNeedChange({data: ''})
-                //     .then(responseFromServer => {
-                //         console.log(`Password need to be change: ${responseFromServer.data}`);
-                //     })
-                //     .catch(err => window.alert(err.response.data.error));
+            
             })
             .catch(err => window.alert(err.response.data.error));
 
