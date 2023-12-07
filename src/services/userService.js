@@ -15,8 +15,10 @@ const lockAccount = (email) => {
     return axios.post(`${baseUrl}/lockAccount`, email);
 }
 
-const passwordNeedChange = (data) => {
-    return axios.post(`${baseUrl}/passwordNeedChange`, data);
+const passwordNeedChange = () => {
+    return axios.get(`${baseUrl}/passwordNeedChange`, {
+        headers: {Authorization: getToken()}
+    });
 }
 
 const getUser = () => {

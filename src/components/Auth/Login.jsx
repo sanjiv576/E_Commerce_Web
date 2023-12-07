@@ -83,13 +83,35 @@ function Login() {
                     // store the user in the user context
                     user.setUser(res.data.user);
 
+                    // check whether the password needs to be changed or not
+
+                    userServices.passwordNeedChange()
+                        .then(responseFromServer => {
+                            if (responseFromServer.data.message) {
+                                if (responseFromServer.data.message === true) {
+                                    navigate('/changePassword');
+
+                                    console.log(`Password need to be change: ${responseFromServer.data.message}`);
+
+                                }
+
+                            }
+                        })
+                        .catch(err => window.alert(err.response.data.error));
+
                     // naviagte to the home page if it is user , otherwise to the admin profile
+
                     if (res.data.user.role === 'user') {
                         navigate('/home');
                     }
                     else if (res.data.user.role === 'admin') {
                         navigate('/addProduct');
                     }
+                    else {
+                        navigate('/');
+                    }
+
+
                 })
                 .catch(err => {
                     // window.alert(err.response.data.error);
