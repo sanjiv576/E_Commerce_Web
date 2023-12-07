@@ -61,7 +61,7 @@ const Signup = () => {
             play();
             setSnack({
                 type: 'error',
-                message: 'Please, follow password rules.',
+                message: 'Please, follow password guidelines.',
             });
             setOpen(true);
             return;
@@ -140,7 +140,7 @@ const Signup = () => {
 
 
     const validatePassword = (password) => {
-        const isLengthValid = password.length >= 8;
+        const isLengthValid = password.length >= 8 && password.length <=12;
         const isUppercaseValid = /[A-Z]/.test(password);
         const isLowercaseValid = /[a-z]/.test(password);
         const isNumberValid = /\d/.test(password);
@@ -299,7 +299,7 @@ const Signup = () => {
                                     className="rounded-lg mt-3 text-white bg-indigo-500 p-5 m-auto lg:w-[500px] md:w-[400px] sm:w-[300px]"
                                     align="center"
                                 >
-                                    <h3 className='text-2xl font-bold' style={{ textDecoration: 'underline' }}>Password Rules</h3>
+                                    <h3 className='text-2xl font-bold' style={{ textDecoration: 'underline' }}>Password Guidelines</h3>
                                     <div className="password-validation-section m-4" align="left">
                                         <label htmlFor="passwordLength">
                                             {
@@ -346,7 +346,7 @@ const Signup = () => {
                                             validatePassword(newPassword).isUppercaseValid &&
                                             validatePassword(newPassword).isNumberValid &&
                                             validatePassword(newPassword).isSpecialCharValid
-                                            ? <h4 className='text-success font-bold'>Good to Signup!</h4> : <h4 className='text-warning font-bold'>Weak password. Follow password rules.</h4>
+                                            ? <h4 className='text-success font-bold'>Good to Signup!</h4> : <h4 className='text-warning font-bold'>Weak password. Follow password guidelines.</h4>
                                     }
                                 </div>
                             </div>
