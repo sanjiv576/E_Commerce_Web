@@ -5,6 +5,8 @@ import sound from '../../assets/sound.wav';
 import { MySnackbar } from '../MySnackbar';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import userServices from '../../services/userService';
+import { useNavigate } from 'react-router-dom';
 
 export const ChangePassword = () => {
 
@@ -21,6 +23,8 @@ export const ChangePassword = () => {
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+
+    const navigate = useNavigate();
 
     // for closing snackbar
     const handleClose = (event, reason) => {
@@ -44,21 +48,47 @@ export const ChangePassword = () => {
             return;
         }
 
-        // change password successfully
-        play();
-        setSnack({
-            type: 'success',
-            message: 'Password changed successfully',
-        });
-        setOpen(true);
+        const passwords = {
+            "oldPassword": oldPassword,
+            "newPassword": newPassword
+        }
 
+        userServices.changePassword(passwords)
+            .then(res => {
 
+                console.log(res.data)
+
+                // change password successfully
+                play();
+                setSnack({
+                    type: 'success',
+                    message: 'Password changed successfully',
+                });
+                setOpen(true);
+
+                setOldPassword('');
+                setNewPassword('');
+
+                navigate('/login');
+
+            }
+
+            )
+            .catch(err => {
+                play();
+                setSnack({
+                    type: 'error',
+                    message: `Error: ${err.response.data.error}`,
+                });
+                setOpen(true);
+            })
 
     };
 
     return (
         <div>
             <div className="gb-darkzero h-screen w-screen">
+                <h1 className='info p-2'>Note: Password expires in every 90 days.</h1>
                 <div className="w-[80] mx-auto" align="center" >
                     <div className='mx-auto pt-10'>
 
