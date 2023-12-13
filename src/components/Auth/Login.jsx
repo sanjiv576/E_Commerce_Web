@@ -7,7 +7,9 @@ import userServices from '../../services/userService';
 import { Alert, Avatar, Chip, Grid, Snackbar, } from '@mui/material';
 import { isEmail } from '../../lib/input-validation';
 import { ResponsiveAppBarLandingPage } from '../AppBar/ResponsiveAppBarLandingPage';
-
+import ReCAPTCHA from "react-google-recaptcha";
+import recaptchKeys from '../../services/recaptcha';
+import { Check, CheckBox } from '@mui/icons-material';
 
 function Login() {
     const auth = useAuth();
@@ -17,8 +19,13 @@ function Login() {
     // for counting the number of times wrong credentials are attempted
     const [counter, setCounter] = useState(0);
 
+    const [userVerified, setUserVerified] = useState(false);
+
     // for open and close snackbar
     const [open, setOpen] = React.useState(false);
+
+    // for showing password
+    const [showPassword, setShowPassword] = useState(false);
 
     // for closing snackbar
     const handleClose = (event, reason) => {
@@ -83,6 +90,9 @@ function Login() {
                     // store the user in the user context
                     user.setUser(res.data.user);
 
+                    // reset user verified
+                    setUserVerified(false);
+
                     // check whether the password needs to be changed or not
 
                     userServices.passwordNeedChange()
@@ -146,6 +156,14 @@ function Login() {
         }
     };
 
+    function onChange(value) {
+        console.log("Captcha value:", value);
+
+        if (value) {
+            setUserVerified(true);
+        }
+    }
+
     return (
         <>
             <ResponsiveAppBarLandingPage />
@@ -198,7 +216,7 @@ function Login() {
                                             Password:
                                         </div>
                                         <input
-                                            type="password"
+                                            type={showPassword ? 'text' : 'password'}
                                             onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
 
                                             placeholder="Enter Your Password ..."
@@ -209,6 +227,14 @@ function Login() {
 
                                         />
                                     </div>
+                                    <br />
+                                    <input
+                                        type="checkbox"
+                                        checked={showPassword}
+                                        onChange={() => setShowPassword(!showPassword)}
+                                    /> Show Password
+
+                                    <br />
 
                                     {
                                         formError !== "" ? (
@@ -230,8 +256,22 @@ function Login() {
                                         )
                                     }
 
-                                    <button onClick={handleLogin} className='btn btn-primary w-full font-bold mt-8 mb-8'>LOGIN</button>
+                                    <br />
 
+                                    <ReCAPTCHA
+                                        sitekey={recaptchKeys.secondSiteKey}
+                                        onChange={onChange}
+                                    />
+
+                                    {
+                                        userVerified ? (
+                                            <button onClick={handleLogin} className='btn btn-primary w-full font-bold mt-8 mb-8'>LOGIN</button>
+
+                                        ) : (
+                                            <button onClick={handleLogin} disabled className='btn btn-primary w-full font-bold mt-8 mb-8'>LOGIN</button>
+
+                                        )
+                                    }
 
                                     <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
                                         <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>

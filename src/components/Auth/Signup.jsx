@@ -248,7 +248,7 @@ const Signup = () => {
                                                 <div className="mt-3 mb-2" align="left">
                                                     Confirm Password:
                                                 </div>
-                                                <OutlinedInput label="Email"
+                                                <OutlinedInput 
                                                     placeholder='Enter again password here...'
                                                     className='input input-bordered input-accent w-full'
                                                     style={{ color: 'white' }}
