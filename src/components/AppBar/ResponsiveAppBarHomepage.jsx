@@ -20,7 +20,7 @@ export const ResponsiveAppBarHomepage = ({ purchaseProductLength }) => {
                 setLoginUser(res.data)
                 console.log(`User full Name: ${res.data.fullName}`)
 
-            
+
             })
             .catch(err => window.alert(err.response.data.error));
 
@@ -72,20 +72,22 @@ export const ResponsiveAppBarHomepage = ({ purchaseProductLength }) => {
                         <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
 
                             {
-                                user.user.role === 'user' ?
-                                    <li><NavLink to={'/home'}>Dashboard</NavLink></li>
-                                    : <li><NavLink to={'/addProduct'} >Add Product</NavLink></li>
+                                user.user.role === 'user' &&
+                                <li><NavLink to={'/home'}>Dashboard</NavLink></li>
+
 
                             }
+
+
                             <li>
                                 <NavLink to={'/profile'}>Profile</NavLink>
 
                             </li>
                             {
-                                user.user.role === 'user' ?
-                                    <li><NavLink to={'/purchaseHistory'}>Purchase History</NavLink></li>
-                                    : <li><NavLink to={'/viewAllProducts'}>View All Products</NavLink></li>
+                                user.user.role === 'user' &&
+                                <li><NavLink to={'/purchaseHistory'}>Purchase History</NavLink></li>
                             }
+
 
                             <li><a onClick={handleLogout}>Logout</a></li>
                         </ul>

@@ -70,8 +70,8 @@ function Login() {
         setFormError("");
         setFormWarning("");
 
-        console.log(`Email: ${credentials.email}`);
-        console.log(`Password: ${credentials.password}`);
+        // console.log(`Email: ${credentials.email}`);
+        // console.log(`Password: ${credentials.password}`);
 
         if (credentials.email === "" || credentials.password === "") {
             setFormError("Please, enter all the fields.");
@@ -86,6 +86,7 @@ function Login() {
 
                     //   get the token from the response and save in the local storage
                     window.localStorage.setItem('token', res.data.token);
+
 
                     // store the user in the user context
                     user.setUser(res.data.user);
@@ -157,7 +158,7 @@ function Login() {
     };
 
     function onChange(value) {
-        console.log("Captcha value:", value);
+        // console.log("Captcha value:", value);
 
         if (value) {
             setUserVerified(true);
