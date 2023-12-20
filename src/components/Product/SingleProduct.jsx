@@ -15,6 +15,7 @@ import { ResponsiveAppBarHomepage } from "../AppBar/ResponsiveAppBarHomepage";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { useUser } from "../../utils/userContext";
+import sanitizeInput from "../../utils/sanitizationInput";
 
 
 function SingleProduct() {
@@ -58,8 +59,15 @@ function SingleProduct() {
 
 
     useEffect(() => {
-        console.log(`Auth: ${auth.email}`)
-        if (auth.email) {
+        // console.log(`Auth: ${auth.email}`)
+        // if (auth.email) {
+        //     setIsUserLogin(true);
+        //     console.log(`User is login`);
+        //     // get user id
+        //     setUserId(user.user.id);
+        //     console.log(`User id is : ${userId}`)
+        // }
+        if (window.localStorage.getItem('token') !== '' || auth.email) {
             setIsUserLogin(true);
             console.log(`User is login`);
             // get user id
@@ -175,8 +183,10 @@ function SingleProduct() {
                 setOpen(true);
                 return;
             }
+
+            const sanitizedReviewInput = sanitizeInput(feedback);
             const addedReview = {
-                text: feedback,
+                text: sanitizedReviewInput,
             }
 
             // add review to the servier
@@ -202,7 +212,7 @@ function SingleProduct() {
                 })
                 .catch(err => {
                     play();
-                    setSnack({ type: 'error', message: err.response.data.error });
+                    setSnack({ type: 'error', message: `${err.response.data.error} It does not support HTML tags.` });
                     setOpen(true);
 
                 })
