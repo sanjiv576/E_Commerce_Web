@@ -3,9 +3,16 @@ import { useAuth } from "./authContext"
 
 export const RequireAuth = ({ children }) => {
     const auth = useAuth()
-    if (!auth.email) {
+
+    const storedToken = window.localStorage.getItem('token');
+
+
+    if (storedToken == null || storedToken == '') {
         return <Navigate to={'/login'} />
     }
+    // if (!auth.email) {
+    //     return <Navigate to={'/login'} />
+    // }
 
     return children
 }
