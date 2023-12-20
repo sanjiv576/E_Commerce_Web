@@ -6,6 +6,7 @@ import sound from '../../assets/sound.wav';
 import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import productServices from '../../services/productService';
+import { AdminAppBar } from '../AppBar/AdminAppBar';
 
 export const AddProduct = () => {
     const [imageName, setImageName] = useState('productDefaultImage.png');
@@ -163,7 +164,8 @@ export const AddProduct = () => {
 
     return (
         <div>
-            <ResponsiveAppBarHomepage purchaseProductLength={0} />
+            {/* <ResponsiveAppBarHomepage purchaseProductLength={0} /> */}
+            <AdminAppBar/>
             <div className="gb-darkzero w-screen m-10">
                 <div className="w-[80] mx-auto" align="center" >
                     <div className='mx-auto pt-10'>
