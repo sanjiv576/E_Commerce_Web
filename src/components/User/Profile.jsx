@@ -80,7 +80,7 @@ export const Profile = () => {
                     play();
                     setSnack({
                         type: 'error',
-                        message: err.response.data.error,
+                        message: 'Failed to upload images. Only support jpg, jpeg, png format.',
                     });
                     setOpen(true);
                 });

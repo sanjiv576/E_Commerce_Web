@@ -77,6 +77,11 @@ export const ResponsiveAppBarHomepage = ({ purchaseProductLength }) => {
 
 
                             }
+                           {
+                                user.user.role === 'admin' ?
+                                    <li><NavLink to={'/addProduct'} >Add Product</NavLink></li> : (<></>)
+
+                            }
 
 
                             <li>
@@ -86,6 +91,10 @@ export const ResponsiveAppBarHomepage = ({ purchaseProductLength }) => {
                             {
                                 user.user.role === 'user' &&
                                 <li><NavLink to={'/purchaseHistory'}>Purchase History</NavLink></li>
+                            }
+                            {
+                                user.user.role === 'admin' &&
+                                     <li><NavLink to={'/viewAllProducts'}>View All Products</NavLink></li>
                             }
 
 
